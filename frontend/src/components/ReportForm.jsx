@@ -142,20 +142,41 @@ const ReportForm = () => {
     };
 
     return (
-        <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-lg my-10">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">Prom 인수시험성적서 간편등록</h2>
-
-            {status.message && (
-                <div className={`mb-4 p-4 rounded-lg flex items-center ${status.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                    {status.type === 'success' ? <CheckCircle className="w-5 h-5 mr-2" /> : <AlertCircle className="w-5 h-5 mr-2" />}
-                    {status.message}
+        <>
+            {/* 전송중 모달 */}
+            {loading && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full mx-4 transform transition-all animate-in fade-in zoom-in-95">
+                        <div className="flex flex-col items-center justify-center space-y-4">
+                            <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
+                            <h3 className="text-xl font-bold text-gray-800">전송중</h3>
+                            <p className="text-sm text-gray-500 text-center">메일을 전송하고 있습니다. 잠시만 기다려주세요...</p>
+                        </div>
+                    </div>
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">사번 (숫자 7자리)</label>
+            <div className="max-w-3xl mx-auto p-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl my-10 border border-white/20">
+                <div className="text-center mb-8">
+                    <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                        Prom 인수시험성적서 간편등록
+                    </h2>
+                    <p className="text-sm text-gray-500">필수 정보를 입력하고 바코드 사진을 업로드해주세요</p>
+                </div>
+
+            {status.message && (
+                <div className={`mb-6 p-4 rounded-xl flex items-center shadow-md animate-in fade-in slide-in-from-top-2 ${status.type === 'success' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'}`}>
+                    {status.type === 'success' ? <CheckCircle className="w-5 h-5 mr-3 flex-shrink-0" /> : <AlertCircle className="w-5 h-5 mr-3 flex-shrink-0" />}
+                    <span className="text-sm font-medium">{status.message}</span>
+                </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                            사번 <span className="text-gray-400 font-normal">(숫자 7자리)</span>
+                        </label>
                         <input
                             type="text"
                             name="employeeId"
@@ -163,26 +184,28 @@ const ReportForm = () => {
                             onChange={handleChange}
                             pattern="\d{7}"
                             required
-                            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                            placeholder="1234567"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white focus:bg-white placeholder:text-gray-400 shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]"
+                            placeholder="110xxxx"
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">이름</label>
+                    <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">이름</label>
                         <input
                             type="text"
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
                             required
-                            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white focus:bg-white placeholder:text-gray-400 shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]"
                             placeholder="홍길동"
                         />
                     </div>
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Prom 접수번호 (숫자 6자리 이상)</label>
+                <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                        Prom 접수번호 <span className="text-gray-400 font-normal">(숫자 6자리 이상)</span>
+                    </label>
                     <input
                         type="text"
                         name="promReceiptNo"
@@ -190,137 +213,155 @@ const ReportForm = () => {
                         onChange={handleChange}
                         pattern="\d{6,}"
                         required
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white focus:bg-white placeholder:text-gray-400 shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]"
                         placeholder="123456"
                     />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">ONU IP</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">ONU IP</label>
                         <input
                             type="text"
                             name="onuIp"
                             value={formData.onuIp}
                             onChange={handleChange}
                             required
-                            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white focus:bg-white placeholder:text-gray-400 shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]"
                             placeholder="192.168.1.1"
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">광 DB</label>
+                    <div className="space-y-2">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1.5">광 DB</label>
                         <input
                             type="text"
                             name="opticalDb"
                             value={formData.opticalDb}
                             onChange={handleChange}
                             required
-                            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white focus:bg-white placeholder:text-gray-400 shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]"
                             placeholder="-20.5"
                         />
                     </div>
                 </div>
 
-
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">설치 위치</label>
+                <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">설치 위치</label>
                     <input
                         type="text"
                         name="installLocation"
                         value={formData.installLocation}
                         onChange={handleChange}
                         required
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                        placeholder="거실"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white focus:bg-white placeholder:text-gray-400 shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]"
+                        placeholder="1층 통신실"
                     />
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">차단기 위치</label>
+                <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">차단기 위치</label>
                     <input
                         type="text"
                         name="breakerLocation"
                         value={formData.breakerLocation}
                         onChange={handleChange}
                         required
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                        placeholder="현관"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white focus:bg-white placeholder:text-gray-400 shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]"
+                        placeholder="2층 전기실"
                     />
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">출입 절차</label>
+                <div className="space-y-2">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">출입 절차</label>
                     <input
                         type="text"
                         name="accessProcedure"
                         value={formData.accessProcedure}
                         onChange={handleChange}
                         required
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white focus:bg-white placeholder:text-gray-400 shadow-[0px_4px_12px_0px_rgba(0,0,0,0.15)]"
                         placeholder="비밀번호 / 호출"
                     />
                 </div>
 
                 {/* Detected Barcodes Section */}
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
-                        <ScanLine className="w-4 h-4 mr-2" />
+                <div className="bg-gradient-to-br from-slate-50 to-blue-50/30 p-5 rounded-xl border-2 border-blue-100 shadow-sm">
+                    <h3 className="text-sm font-bold text-gray-800 mb-3 flex items-center">
+                        <ScanLine className="w-5 h-5 mr-2 text-blue-600" />
                         인식된 바코드
                     </h3>
                     {ocrResults.length === 0 && !ocrLoading && (
-                        <p className="text-xs text-gray-500">사진을 업로드하면 여기에 바코드 정보가 표시됩니다.</p>
+                        <p className="text-sm text-gray-500 italic">사진을 업로드하면 여기에 바코드 정보가 표시됩니다.</p>
                     )}
-                    {ocrLoading && <p className="text-xs text-blue-500 animate-pulse">바코드 분석 중...</p>}
+                    {ocrLoading && (
+                        <div className="flex items-center gap-2 text-blue-600">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <p className="text-sm font-medium animate-pulse">바코드 분석 중...</p>
+                        </div>
+                    )}
 
-                    <ul className="space-y-1 mt-2">
+                    <ul className="space-y-2 mt-3">
                         {ocrResults.map((res, idx) => (
                             res && (
-                                <li key={idx} className={`text-xs px-2 py-1 rounded flex justify-between ${res.type === '샤시' ? 'bg-blue-100 text-blue-800 font-bold' : 'bg-gray-200 text-gray-700'}`}>
-                                    <span>{res.type}</span>
-                                    <span>{res.number}</span>
+                                <li key={idx} className={`text-sm px-3 py-2 rounded-lg flex justify-between items-center shadow-sm transition-all duration-200 ${res.type === '샤시' ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold shadow-blue-200' : 'bg-white text-gray-700 border border-gray-200'}`}>
+                                    <span className="font-medium">{res.type}</span>
+                                    <span className="font-mono text-xs">{res.number}</span>
                                 </li>
                             )
                         ))}
                     </ul>
 
                     {!hasChassis && images.length > 0 && !ocrLoading && (
-                        <p className="text-xs text-red-500 mt-2 font-bold">* 샤시 바코드가 포함된 사진이 필요합니다.</p>
+                        <div className="mt-3 p-3 bg-rose-50 border border-rose-200 rounded-lg">
+                            <p className="text-xs text-rose-700 font-semibold flex items-center">
+                                <AlertCircle className="w-4 h-4 mr-1.5" />
+                                * 샤시 바코드가 포함된 사진이 필요합니다.
+                            </p>
+                        </div>
                     )}
                 </div>
 
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition cursor-pointer relative">
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50/30 transition-all duration-300 cursor-pointer relative group">
                     <input
                         type="file"
                         accept="image/*"
                         multiple
                         onChange={handleImageChange}
                         disabled={images.length >= 8}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed z-10"
                     />
-                    <div className="flex flex-col items-center text-gray-500">
-                        <Upload className="w-12 h-12 mb-2" />
-                        <p>{images.length >= 8 ? "최대 8장까지 업로드 가능" : "사진 업로드 (클릭)"}</p>
-                        <p className="text-xs text-gray-400">({images.length}/8 장)</p>
+                    <div className="flex flex-col items-center text-gray-500 group-hover:text-blue-600 transition-colors">
+                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-3 group-hover:bg-blue-200 transition-colors">
+                            <Upload className="w-8 h-8 text-blue-600" />
+                        </div>
+                        <p className="font-semibold text-base mb-1">
+                            {images.length >= 8 ? "최대 8장까지 업로드 가능" : "사진 업로드 (클릭)"}
+                        </p>
+                        <p className="text-sm text-gray-400">
+                            ({images.length}/8 장)
+                        </p>
                     </div>
                 </div>
 
                 {previewUrls.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {previewUrls.map((url, index) => (
                             <div key={index} className="relative group">
-                                <img src={url} alt={`Preview ${index}`} className="w-full h-24 object-cover rounded-lg shadow-sm" />
-                                <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-[10px] p-1 truncate text-center">
-                                    {ocrResults[index] ? `${ocrResults[index].type}: ${ocrResults[index].number.slice(-6)}` : '인식 실패'}
+                                <div className="relative overflow-hidden rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                                    <img src={url} alt={`Preview ${index}`} className="w-full h-32 object-cover" />
+                                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white text-xs p-2">
+                                        <div className="font-medium truncate">
+                                            {ocrResults[index] ? `${ocrResults[index].type}: ${ocrResults[index].number.slice(-6)}` : '인식 실패'}
+                                        </div>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => removeImage(index)}
+                                        className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
+                                    >
+                                        <X className="w-4 h-4" />
+                                    </button>
                                 </div>
-                                <button
-                                    type="button"
-                                    onClick={() => removeImage(index)}
-                                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
-                                >
-                                    <X className="w-3 h-3" />
-                                </button>
                             </div>
                         ))}
                     </div>
@@ -329,14 +370,27 @@ const ReportForm = () => {
                 <button
                     type="submit"
                     disabled={loading || !hasChassis}
-                    className={`w-full py-3 px-4 rounded-lg text-white font-semibold flex items-center justify-center gap-2 transition ${(loading || !hasChassis) ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg'
-                        }`}
+                    className={`w-full py-4 px-6 rounded-xl text-white font-bold text-base flex items-center justify-center gap-3 transition-all duration-300 transform ${
+                        (loading || !hasChassis) 
+                            ? 'bg-gray-400 cursor-not-allowed' 
+                            : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]'
+                    }`}
                 >
-                    {loading ? <Loader2 className="animate-spin" /> : <Send />}
-                    {loading ? '전송 중...' : '성적서 등록'}
+                    {loading ? (
+                        <>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <span>전송 중...</span>
+                        </>
+                    ) : (
+                        <>
+                            <Send className="w-5 h-5" />
+                            <span>성적서 등록</span>
+                        </>
+                    )}
                 </button>
             </form>
         </div>
+        </>
     );
 };
 
