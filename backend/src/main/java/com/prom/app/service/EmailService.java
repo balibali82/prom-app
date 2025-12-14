@@ -27,7 +27,7 @@ public class EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
         helper.setFrom(fromEmail);
-        helper.setTo(fromEmail); // Sending to self/admin for now.
+        helper.setTo("a585882@sk.com");
         helper.setSubject("[Prom]인수시험성적서-" + request.getPromReceiptNo());
 
         StringBuilder body = new StringBuilder();
